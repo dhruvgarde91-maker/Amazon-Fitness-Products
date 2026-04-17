@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Products - Amazon Affiliate Bridge Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .filters {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-button {
+            background-color: #ddd;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            min-width: 80px;
+        }
+
+        .filter-button.active {
+            background-color: #ff9900;
+            color: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-card h3 {
+            margin: 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .product-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .modal-content h2 {
+            color: #333;
+            font-size: 20px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .buy-button {
+            background-color: #ff9900;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .buy-button:hover {
+            background-color: #e68a00;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-button {
+                width: 80%;
+                max-width: 200px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-card img {
+                height: 150px;
+            }
+
+            .product-card h3 {
+                font-size: 16px;
+            }
+
+            .product-card p {
+                font-size: 13px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+                margin: 10% auto;
+            }
+
+            .modal-content h2 {
+                font-size: 18px;
+            }
+
+            .modal-content p {
+                font-size: 13px;
+            }
+
+            .buy-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+        #modalDescription {
+            justify-content: justify;
+            align-items: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Top Fitness Products on Amazon</h1>
+
+        <!-- 
+        <div class="filters">
+            <button class="filter-button active" onclick="filterProducts('all')">All</button>
+            <button class="filter-button" onclick="filterProducts('weights')">Weights</button>
+            <button class="filter-button" onclick="filterProducts('cardio')">Cardio</button>
+            <button class="filter-button" onclick="filterProducts('accessories')">Accessories</button>
+        </div>  -->
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="">
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+            <p id="modalPrice"></p>
+            <a id="buyLink" href="#" class="buy-button">Buy on Amazon</a>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            {
+                title: "Garmin vívoactive® 6: AMOLED GPS Smartwatch",
+                image: "img01.jpg",
+                description: "The Garmin vívoactive 6 combines style with power. Enjoy a vibrant AMOLED display and up to 11 days of battery. Track your energy with Body Battery, get personalized sleep coaching, and detect naps automatically. With 80+ sports apps and animated workouts, it’s built for every activity. Plus, 'Workout Benefit' and recovery insights help you train smarter every day.",
+                price: "$299.99",
+                category: "weights",
+                link: "https://amzn.to/41GOKOp" // Replace with actual affiliate link
+            },
+            {
+                title: "Garmin vívoactive® 6: AMOLED Health & GPS Smartwatch",
+                image: "img02.jpg",
+                description: "The Garmin vívoactive 6 features a stunning AMOLED display and an impressive 11-day battery. Optimize your day with Body Battery™ energy monitoring, automatic nap detection, and personalized sleep coaching. Stay active with 80+ sports apps and animated workouts, while advanced training insights like Recovery Time and Workout Benefit help you reach your goals faster.",
+                price: "$281.00 ",
+                category: "weights",
+                link: "https://amzn.to/4vCao41" // Replace with actual affiliate link
+            },
+            {
+                title: "Garmin vívoactive® 5: Ivory AMOLED GPS Smartwatch",
+                image: "img03.jpg",
+                description: "The Garmin vívoactive 5 features a vibrant AMOLED display and 11-day battery. Master your health with Body Battery™, nap detection, and personalized sleep coaching. It includes 30+ sports apps, wheelchair mode, and advanced HRV tracking. Enjoy phone-free music via Spotify, plus Workout Benefit and Recovery Time insights to help you train smarter every day.",
+                price: "$178.49",
+                category: "cardio",
+                link: "https://amzn.to/4chCdqQ"
+            },
+            {
+                title: "Garmin vívoactive® 5: Orchid AMOLED GPS Smartwatch",
+                image: "img04.jpg",
+                description: "The Garmin vívoactive 5 in Orchid features a vivid AMOLED display and 11-day battery. Track your health with Body Battery™, nap detection, and personalized sleep coaching. It offers 30+ sports apps, a dedicated wheelchair mode, and phone-free music. With Workout Benefit and Recovery Time insights, you’ll know exactly how your training impacts your body every day.",
+                price: "$191.99",
+                category: "accessories",
+                link: "https://amzn.to/4sJaUL0"
+            },
+            {
+                title: "Garmin vívoactive® 5: Black & Slate GPS Smartwatch",
+                image: "img05.jpg",
+                description: "The Garmin vívoactive 5 features a bold AMOLED display and 11-day battery. Monitor your health with Body Battery™, nap detection, and sleep coaching. It includes 30+ sports apps, a specialized wheelchair mode, and phone-free music via Spotify/Amazon Music. Track your progress with Workout Benefit and Recovery Time to understand exactly how every session impacts your body.",
+                price: "227.00",
+                category: "accessories",
+                link: "https://amzn.to/3OJ5i5q"
+            },
+        
+        ];
+
+        let currentFilter = 'all';
+
+        function renderProducts(filter) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            const filteredProducts = filter === 'all' ? products : products.filter(p => p.category === filter);
+            filteredProducts.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.onclick = () => openModal(index);
+                card.innerHTML = `
+                    <img src="${product.image}" alt="${product.title}">
+                    <h3>${product.title}</h3>
+                    <p>${product.price}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterProducts(category) {
+            currentFilter = category;
+            renderProducts(category);
+            // Update active button
+            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function openModal(index) {
+            const filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
+            const product = filteredProducts[index];
+            document.getElementById('modalImage').src = product.image;
+            document.getElementById('modalTitle').textContent = product.title;
+            document.getElementById('modalDescription').textContent = product.description;
+            document.getElementById('modalPrice').textContent = product.price;
+            document.getElementById('buyLink').href = product.link;
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('productModal')) {
+                closeModal();
+            }
+        }
+
+        // Initial render
+        renderProducts('all');
+    </script>
+</body>
+
+</html>
